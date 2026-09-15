@@ -224,6 +224,7 @@ export default function Home() {
 
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
+  const [searchError, setSearchError] = useState("");
 
   const [showPrivacy, setShowPrivacy] = useState(false);
 
@@ -390,6 +391,7 @@ export default function Home() {
     setQuery(finalQuery);
     setLoading(true);
     setSearched(true);
+    setSearchError("");
 
     try {
       const params =
@@ -420,8 +422,13 @@ export default function Home() {
       setResults(
         data.results || []
       );
-    } catch {
+    } catch (error) {
       setResults([]);
+      setSearchError(
+        error instanceof Error
+          ? error.message
+          : "Search service is unavailable"
+      );
     } finally {
       setLoading(false);
     }
@@ -635,6 +642,7 @@ export default function Home() {
     setQuery("");
     setResults([]);
     setSearched(false);
+    setSearchError("");
     setShowPrivacy(false);
 
     closeBrowser();
@@ -1174,11 +1182,15 @@ export default function Home() {
                 </h3>
 
                 <p>
-                  Try a different
-                  search or check
-                  your connection
-                  to the search
-                  service.
+                  {searchError || (
+                    <>
+                      Try a different
+                      search or check
+                      your connection
+                      to the search
+                      service.
+                    </>
+                  )}
                 </p>
 
               </div>
