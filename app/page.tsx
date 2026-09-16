@@ -450,6 +450,28 @@ export default function Home() {
       return "";
     }
 
+    try {
+      const parsed = new URL(
+        trimmed,
+        "https://html.duckduckgo.com"
+      );
+      const destination = parsed.searchParams.get("uddg");
+
+      if (destination) {
+        const destinationUrl = new URL(destination);
+
+        if (
+          ["http:", "https:"].includes(
+            destinationUrl.protocol
+          )
+        ) {
+          return destinationUrl.toString();
+        }
+      }
+    } catch {
+      return "";
+    }
+
     /*
     Already HTTP/HTTPS
     */
